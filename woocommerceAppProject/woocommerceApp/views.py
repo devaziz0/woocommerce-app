@@ -15,6 +15,7 @@ import json
 import requests
 from django.conf import settings
 import os
+from woocommerce import API
 # Create your views here.
 
 @login_required
@@ -47,8 +48,10 @@ def schedule_creation(request):
                 schedule.save()
                 subscription.schedules_nb=subscription.schedules_nb -1
                 subscription.save()
+                schedule_form = ScheduleForm()
 
-                context = { 'response': response,
+                context = { 'schedule_form' : schedule_form,
+                            'response': response,
                             'schedule': schedule.id,
                             'scrap_done': True
                             }
@@ -88,7 +91,7 @@ def generate_csv_file(request,id):
             originalPrice = product['originalPrice']
             salePrice = product['salePrice']
             incr = Decimal(sub(r'[^\d.]', '', salePrice))
-            priceinc = incr * 3  # print(incr, priceinc)
+            priceinc = incr * schedule.AliExpress_Increment  # print(incr, priceinc)
             imageUrl = product['imageUrl']
             writer.writerow([productId,productTitle,productUrl,
                             originalPrice,salePrice,imageUrl])
@@ -106,7 +109,8 @@ def generate_csv_file(request,id):
         return render(request,"woocommerce/generate_success.html", context)
     else:
         context = { 'schedule': schedule.id,
-                    'state' : schedule.file_state
+                    'state' : schedule.file_state,
+                    'post' : False
         }
         return render(request,"woocommerce/generate_success.html", context)
 
@@ -123,6 +127,98 @@ def get_csv_file(request,id):
     schedule.save()
     response['Content-Disposition'] = 'attachment; filename=%s' %'response'+ str(id)+'.csv'
     return response
+
+@login_required
+def woocommerce_post(request,id):
+    schedule =  Schedule.objects.get(pk=id)
+    wcapi = API(
+        url = schedule.woocommerce_url,
+        consumer_key = schedule.woocommerce_consumer_key,
+        consumer_secret= schedule.woocommerce_secret_key,
+        wp_api=True,
+        timeout= 100,
+        version="wc/v2"
+    )
+    path = os.path.join(settings.BASE_DIR,schedule.schedule_file.path)
+    f = open(path,'r')
+    json_file = json.loads(f.read())
+
+    getlistproducts = json_file['result']['products']
+    print(getlistproducts)
+    for resultsget in getlistproducts:
+        producturls = resultsget['productUrl']
+        productitles = resultsget['productTitle']
+        productids = resultsget['productId']
+        originalprices = resultsget['originalPrice']
+        saleprices = resultsget['salePrice']
+        incr = Decimal(sub(r'[^\d.]', '', saleprices))
+        priceinc = incr * 3  # print(incr, priceinc)
+        conint = int(priceinc)
+        imageurls = resultsget[
+            'imageUrl']  # print(productids, productitles,originalprices,saleprices,imageurls, producturls )
+        urlpromo = "http://gw.api.alibaba.com/openapi/param2/2/portals.open/api.getPromotionLinks/9420?fields=promotionUrl&trackingId=bazaarmaya"  # GET PROMOTIONAL URL
+        payloadpromo = {
+            'urls': producturls
+        }
+        promoget = requests.get(urlpromo, params=payloadpromo)
+        promotojson = promoget.text
+        promoresult = json.loads(promotojson)
+        promourl = promoresult['result']['promotionUrls'][0]['promotionUrl']
+        divpromo = "<div class='invisible'>" + promourl + "</div>"
+        getdetailsurl = 'http://gw.api.alibaba.com/openapi/param2/2/portals.open/api.getPromotionProductDetail/'  # GET DETAILS
+        api_key = '9420'
+        fields = '?fields=discount,evaluateScore,commission,commissionRate,30daysCommission,volume,packageType,lotNum,validTime,allImageUrls'
+        payloads = {
+            'productId': productids
+        }
+        detailurl = getdetailsurl + api_key + fields
+        detailr = requests.get(detailurl, params=payloads)
+        getlist = detailr.text
+        tojson = json.loads(getlist)
+        getresult = tojson['result']
+        getdetailvol = getresult['volume']
+        getdetailevalscore = getresult['evaluateScore']
+        getdetaillotnum = getresult['lotNum']
+        getdetaildiscount = getresult['discount']
+        getdetailvalid = getresult['validTime']
+        getdetailcommision = getresult['30daysCommission']
+        getdetailpacktyper = getresult['packageType']
+        getdetailallimage = tojson['result']['allImageUrls'].split(',')
+        domUrl = "https://www.aliexpress.com/"  # GET DESCRIPTIONS
+        dommer = "getDescModuleAjax.htm?productId="
+        objecTo = str(productids)
+        target = domUrl + dommer + objecTo
+        r = requests.get(target)
+        mored = r.text
+        cutt = mored[29:-5]
+        data = {
+            "name": productitles,
+            "type": "simple",
+            "regular_price": str(conint),
+            "description": cutt + divpromo,
+            "short_description": "",
+            "categories": [
+                {
+                    "id": schedule.AliExpress_category
+                }
+            ],
+            "images": []
+        }
+
+        for number, url in enumerate(getdetailallimage):
+            data["images"].append({"src": url, "position": number})
+
+        wcapi.post("products", data)
+
+        context = { 'schedule': schedule.id,
+                    'state' : schedule.file_state,
+                    'post' : True
+        }
+
+        return render(request,"woocommerce/generate_success.html", context)
+
+
+
 
 @transaction.atomic
 def signup(request):
