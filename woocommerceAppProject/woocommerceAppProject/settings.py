@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+ALLOWED_HOSTS = ['*']
+
 ROOT_URLCONF = 'woocommerceAppProject.urls'
 
 TEMPLATES = [
@@ -85,7 +87,7 @@ DATABASES = {
    }
 
 }
-# 
+#
 # DATABASES = {
 #      'default': {
 #          'ENGINE': 'django.db.backends.sqlite3',
