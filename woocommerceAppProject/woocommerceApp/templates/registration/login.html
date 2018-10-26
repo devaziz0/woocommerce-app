@@ -1,0 +1,36 @@
+{% extends '../woocommerce/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="blank">
+<!-- Simple splash screen-->
+
+<div class="login-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center m-b-md">
+                <h3>PLEASE LOGIN TO APP</h3>
+            </div>
+            <div class="hpanel">
+                <div class="panel-body">
+                        <form action="{%url 'woocommerceApp:login'%}" id="loginForm" method="post">
+                          {% csrf_token %}
+                          {{ form.as_p }}
+                          {% if form.errors %}
+                          <p>Your username and password didn't match. Please try again.</p>
+                          {% endif %}
+                          <button class="btn btn-success btn-block" type="submit">Login</button>
+                            <a class="btn btn-default btn-block" href="{%url 'woocommerceApp:signup'%}">Register</a>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <strong>HOMER</strong> - AngularJS Responsive WebApp <br/> 2015 Copyright Company Name
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

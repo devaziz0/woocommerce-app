@@ -1,0 +1,94 @@
+{% extends 'woocommerce/baseUser.html' %}
+
+{% load staticfiles %}
+{% block content %}
+    <div class="" id="wrapper">
+        <p>Dachboard</p>
+        <div class="text-center">
+          <a href="{%url 'woocommerceApp:schedule'%}">
+
+       <button type="button" class="btn btn-success" onclick="request_form()">
+           Make a new request
+       </button>
+     </a>
+
+       </div>
+       <div class="row">
+         <div class="col-lg-1">
+
+         </div>
+       <div class="hpanel col-lg-10">
+
+           <div class="panel-body">
+               <div class="table-responsive">
+               <table class="table table-hover table-bordered table-striped">
+                   <tbody>
+                  {% for schedule in schedules %}
+                   <tr>
+                        {% if schedule.file_state == 'P' %}
+                       <td>
+                           <span class="label label-warning">Pending</span>
+                       </td>
+                        {% elif schedule.file_state == 'C' %}
+                        <td>
+                            <span class="label label-success">Created</span>
+                        </td>
+                        {% elif schedule.file_state == 'D' %}
+                        <td>
+                            <span class="label label-primary">Done</span>
+                        </td>
+                        {% endif %}
+                       <td class="issue-info">
+                           <a href="#">
+                               Request {{schedule.id}}
+                           </a>
+                           <br/>
+                           <small>
+                               Keywords: {{schedule.AliExpress_keywords}}, Category: {{schedule.AliExpress_category}}.
+                           </small>
+                       </td>
+                       <td>
+                           {{ schedule.woocommerce_url }}
+                       </td>
+                       <td>
+                           {{ schedule.schedule_start }}
+                       </td>
+                       <td class="text-right">
+                            <a href="{%url 'woocommerceApp:download' schedule.id %}">
+                           <button class="btn btn-default btn-xs"> Download</button>
+                           </a>
+                       </td>
+                   </tr>
+                   {%endfor%}
+                 </tbody>
+               </table>
+               </div>
+             </div>
+           </div>
+           <div class="col-lg-1">
+
+           </div>
+         </div>
+
+
+  </div>
+  {% block scripts %}
+  <script type="text/javascript">
+
+        $.ajax({
+          type: "POST",
+          url: url,
+      //data: {'time': time_filter_list, 'tag': tag_filter_list, 'title':input_value},
+        success: function(result) {
+              $("#schedule-form").html(result)
+            },
+        error: function(error) {
+              //  alert("ERROR");
+        //  console.log(url);
+          }
+        });
+
+      }
+  </script>
+  {% endblock %}
+{% endblock %}

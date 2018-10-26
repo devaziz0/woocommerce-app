@@ -1,0 +1,39 @@
+{% extends 'woocommerce/base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="register-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center m-b-md">
+                <h3>Registration</h3>
+                <small>Full suported AngularJS WebApp/Admin template with very clean and aesthetic style prepared for your next app. </small>
+            </div>
+            <div class="hpanel">
+                <div class="panel-body">
+                        <form action="{%url 'woocommerceApp:signup' %}" id="loginForm" method="post">
+                          {% csrf_token %}
+                    				{{user_form.as_p}}
+                                    <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;">
+                                    </div>
+                    				<p>
+                    				<label for="pw2">Confim password:</label>
+                    				<input id="pw2" type="password" name="pw2" required="true">
+                    				</p>
+                    				{{profile_form.as_p}}
+
+                                <button class="btn btn-success" type="submit">Register</button>
+                                <button class="btn btn-default">Cancel</button>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <strong>HOMER</strong> - AngularJS Responsive WebApp <br/> 2015 Copyright Company Name
+        </div>
+    </div>
+</div>
+
+{% endblock %}

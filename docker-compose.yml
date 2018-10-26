@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  web:
+    build: .
+    image: woocommerce:0.1
+    volumes:
+      - ./woocommerceAppProject:/opt/woocommerceAppProject
+    ports:
+      - "80:8000"
+    restart: on-failure
+    depends_on:
+      - "db"
+    restart: on-failure
+    environment:
+      - PG_HOSTNAME=db
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_PASSWORD=openclass
+      - POSTGRES_USER=openclass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
