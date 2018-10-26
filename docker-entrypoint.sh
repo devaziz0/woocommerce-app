@@ -19,7 +19,7 @@ echo "The Database has been updated"
 
 # create admin user
 echo "Superuser..."
-cat /create_superuser.py | ./manage.py shell
+# cat /create_superuser.py | ./manage.py shell
 
 # run the server
 echo "Starting the server..."
