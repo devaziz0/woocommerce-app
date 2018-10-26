@@ -75,31 +75,26 @@ WSGI_APPLICATION = 'woocommerceAppProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'woocommerce',
+#        'USER': 'woocommerce',
+#        'PASSWORD': 'woocommerce',
+#        'HOST': 'db',
+#        'PORT': 5432,
+#    }
+#
+# }
+
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'woocommerce',
-       'USER': 'woocommerce',
-       'PASSWORD': 'woocommerce',
-       'HOST': 'db',
-       'PORT': 5432,
-   }
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+     }
+ }
 
 
-
-Q_CLUSTER = {
-    'recycle': 500,
-    'timeout': 60,
-    'compress': True,
-    'save_limit': 250,
-    'queue_limit': 500,
-    'cpu_affinity': 1,
-    'label': 'Django Q',
-    'redis': {
-        'host': '127.0.0.1',
-        'port': 6379,
-        'db': 0, }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

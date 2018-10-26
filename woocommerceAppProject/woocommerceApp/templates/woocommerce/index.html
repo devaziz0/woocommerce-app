@@ -3,21 +3,17 @@
 {% load staticfiles %}
 {% block content %}
     <div class="" id="wrapper">
-        <p>Dachboard</p>
-        <div class="text-center">
-          <a href="{%url 'woocommerceApp:schedule'%}">
-
-       <button type="button" class="btn btn-success" onclick="request_form()">
-           Make a new request
-       </button>
-     </a>
-
-       </div>
-       <div class="row">
-         <div class="col-lg-1">
-
+      <div class="row">
+        <div class="col-lg-1 col-lg-offset-1" style="margin-top: 1em;">
+         <div>
+         <b>List of requests:</b>
          </div>
-       <div class="hpanel col-lg-10">
+        </div>
+      </div>
+       <div class="row" >
+         <div class="col-lg-1" >
+         </div>
+       <div class="hpanel col-lg-10" style="margin-top: 1em;">
 
            <div class="panel-body">
                <div class="table-responsive">
@@ -53,9 +49,9 @@
                        <td>
                            {{ schedule.schedule_start }}
                        </td>
-                       <td class="text-right">
+                       <td class="text-center">
                             <a href="{%url 'woocommerceApp:download' schedule.id %}">
-                           <button class="btn btn-default btn-xs"> Download</button>
+                           <button class="btn btn-primary btn-sm"> Download</button>
                            </a>
                        </td>
                    </tr>
@@ -70,6 +66,15 @@
            </div>
          </div>
 
+         <div class="text-center" style="margin-top: 1em; margin-bottom: 1em;">
+           <a href="{%url 'woocommerceApp:schedule'%}">
+
+             <button type="button" class="btn btn-success" onclick="request_form()">
+               Make a new request
+             </button>
+           </a>
+
+        </div>
 
   </div>
   {% block scripts %}

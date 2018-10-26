@@ -47,10 +47,8 @@ def schedule_creation(request):
                 schedule.save()
                 subscription.schedules_nb=subscription.schedules_nb -1
                 subscription.save()
-                schedule_form_again = ScheduleForm()
 
-                context = { 'schedule_form': schedule_form_again,
-                            'response': response,
+                context = { 'response': response,
                             'schedule': schedule.id,
                             'scrap_done': True
                             }
@@ -71,64 +69,56 @@ def schedule_creation(request):
 
 @login_required
 def generate_csv_file(request,id):
-    path = settings.MEDIA_ROOT + '/profiles/dopeman2/schedule' + str(id)  +'.csv'
-    f = open(path, 'w')
-    newFile = File(f)
-    writer = csv.writer(newFile)
-    writer.writerow(['Product ID', 'Product Title', 'Product URL',
-                    'Original Price', 'Sale Price','Image URL'])
     schedule = Schedule.objects.get(pk=id)
+    if schedule.file_state == 'P':
+        path = settings.MEDIA_ROOT + '/profiles/dopeman2/schedule' + str(id)  +'.csv'
+        f = open(path, 'w')
+        writer = csv.writer(f)
+        writer.writerow(['Product ID', 'Product Title', 'Product URL',
+                    'Original Price', 'Sale Price','Image URL'])
 
-    path = schedule.schedule_file.path
-    response_path = os.path.join( settings.BASE_DIR, path )
-    json_reader = json.loads(open(response_path).read())
-    products = json_reader['result']['products']
-    for product in products:
-        productUrl = product['productUrl']
-        productTitle = product['productTitle']
-        productId = product['productId']
-        originalPrice = product['originalPrice']
-        salePrice = product['salePrice']
-        incr = Decimal(sub(r'[^\d.]', '', salePrice))
-        priceinc = incr * 3  # print(incr, priceinc)
-        imageUrl = product['imageUrl']
-        writer.writerow([productId,productTitle,productUrl,
-                        originalPrice,salePrice,imageUrl])
-    # print(schedule_id)
-    # print(schedule)
-    os.remove(unicode(schedule.schedule_file.path))
-    schedule.schedule_file.save(path, newFile, save =True)
-    response['Content-Disposition'] = 'attachment; filename=%s' %'response'+ str(id)+'.csv'
-    return response
+        path_old = schedule.schedule_file.path
+        response_path = os.path.join( settings.BASE_DIR, path_old )
+        json_reader = json.loads(open(response_path).read())
+        products = json_reader['result']['products']
+        for product in products:
+            productUrl = product['productUrl']
+            productTitle = product['productTitle']
+            productId = product['productId']
+            originalPrice = product['originalPrice']
+            salePrice = product['salePrice']
+            incr = Decimal(sub(r'[^\d.]', '', salePrice))
+            priceinc = incr * 3  # print(incr, priceinc)
+            imageUrl = product['imageUrl']
+            writer.writerow([productId,productTitle,productUrl,
+                            originalPrice,salePrice,imageUrl])
+        f.close()
+        f = open(path, 'r')
+        newFile = ContentFile(f.read())
+        schedule.file_state= 'C'
+        schedule.schedule_file.delete()
+        schedule.schedule_file_csv.save('a.csv',newFile)
+        os.remove(f.name)
+        context = { 'schedule': schedule.id,
+                    'state' : schedule.file_state
+
+        }
+        return render(request,"woocommerce/generate_success.html", context)
+    else:
+        context = { 'schedule': schedule.id,
+                    'state' : schedule.file_state
+        }
+        return render(request,"woocommerce/generate_success.html", context)
 
 
 @login_required
 def get_csv_file(request,id):
-
-    request.responseType ='blob'
-    response = HttpResponse(content_type='text/csv')
-    writer = csv.writer(response)
-    writer.writerow(['Product ID', 'Product Title', 'Product URL',
-                    'Original Price', 'Sale Price','Image URL'])
     schedule = Schedule.objects.get(pk=id)
-    schedule.file_state = 'D'
-    path = schedule.schedule_file.path
+    path = schedule.schedule_file_csv.path
     response_path = os.path.join( settings.BASE_DIR, path )
-    json_reader = json.loads(open(response_path).read())
-    products = json_reader['result']['products']
-    for product in products:
-        productUrl = product['productUrl']
-        productTitle = product['productTitle']
-        productId = product['productId']
-        originalPrice = product['originalPrice']
-        salePrice = product['salePrice']
-        incr = Decimal(sub(r'[^\d.]', '', salePrice))
-        priceinc = incr * 3  # print(incr, priceinc)
-        imageUrl = product['imageUrl']
-        writer.writerow([productId,productTitle,productUrl,
-                        originalPrice,salePrice,imageUrl])
-    # print(schedule_id)
-    # print(schedule)
+
+    f = open(response_path, 'r')
+    response = HttpResponse(f,content_type='text/csv')
     schedule.file_state = 'D'
     schedule.save()
     response['Content-Disposition'] = 'attachment; filename=%s' %'response'+ str(id)+'.csv'

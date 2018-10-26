@@ -14,9 +14,7 @@ class ProfileForm(ModelForm):
         widgets = {
                 'password':forms.PasswordInput(),
                 'birthday': forms.DateInput(attrs={'type':'date','class':'form-control'}),
-                'birthday':forms.PasswordInput(attrs= {'class':'form-control'}),
-                'gender':forms.PasswordInput(attrs= {'class':'form-control'}),
-                'mailing_Address':forms.PasswordInput(attrs= {'class':'form-control'}),
+                'mailing_Address':forms.TextInput(attrs= {'class':'form-control'}),
 
 
         }
@@ -32,7 +30,7 @@ class UserForm(ModelForm):
                 'first_name' : forms.TextInput(attrs= {'class':'form-control'}),
                 'last_name' : forms.TextInput(attrs= {'class':'form-control'}),
                 'email' : forms.TextInput(attrs= {'class':'form-control'}),
-
+                'gender' : forms.Select(attrs= {'class': 'form-control'})
 
 
 

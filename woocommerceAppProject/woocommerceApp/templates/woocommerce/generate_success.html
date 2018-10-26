@@ -1,0 +1,59 @@
+{% extends 'woocommerce/baseUser.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div id="wrapper">
+  <div class="row">
+    <div class="col-lg-2">
+
+    </div>
+  <div class="col-lg-8">
+
+
+
+  <div class="content">
+    <div class="hpanel">
+        <div class="panel-heading">
+            <div class="panel-tools">
+
+            </div>
+            Basic elements
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-10">
+              <div class="col-lg-1">
+                <img src="{%static 'template/icons/checked.png' %}" alt="success" style="width : 5em; height: 5em;">
+              </div>
+              <div class="col-lg-10" style="margin: 1em;">
+                Request completed, the CSV file is ready to be dowloaded !, you can download it right now or within 24 hours.
+              </div>
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-8">
+
+            </div>
+            <div class="col-lg-4 col-lg-offset-9" style="padding-right: 5em;">
+                <a href="{%url 'woocommerceApp:index' %}">
+                <button class="btn btn-default" type="submit">Back to dashboard</button>
+                </a>
+                <a href="{%url 'woocommerceApp:download' schedule %}">
+                <button class="btn btn-primary" type="submit">Download</button>
+                </a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+</div>
+
+{% endblock %}

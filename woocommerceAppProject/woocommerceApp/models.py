@@ -130,6 +130,7 @@ class Schedule(models.Model):
         )
 
     schedule_file = models.FileField(upload_to=user_directory_path)
+    schedule_file_csv = models.FileField(upload_to=user_directory_path)
     file_state = models.CharField(max_length=1, default='P')
 
     def decrease_hour(self):
@@ -151,10 +152,7 @@ class Schedule(models.Model):
         tojson = json.loads(getlist)
         getlistproducts = tojson['result']['products']
         json_file = ContentFile(getlist)
-        print(json_file)
         self.schedule_file.save('a.json',json_file,save=True)
-        print(self.schedule_file.url)
-        print(tojson['result']['totalResults'])
         response = {
             "url" : self.schedule_file.url,
             "path" : self.schedule_file.path
