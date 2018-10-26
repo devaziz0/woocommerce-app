@@ -6,7 +6,6 @@ import json
 from django.utils import timezone
 from aliexpress_api_client import AliExpress
 from woocommerce import API
-from bs4 import BeautifulSoup
 import math
 from re import sub
 from decimal import Decimal
