@@ -15,10 +15,7 @@
   <div class="content">
     <div class="hpanel">
         <div class="panel-heading">
-            <div class="panel-tools">
 
-            </div>
-            Basic elements
         </div>
         <div class="panel-body">
           <div class="row">
@@ -27,7 +24,11 @@
                 <img src="{%static 'template/icons/checked.png' %}" alt="success" style="width : 5em; height: 5em;">
               </div>
               <div class="col-lg-10" style="margin: 1em;">
+                {% if post %}
                 Request completed, the CSV file is ready to be dowloaded !, you can download it right now or within 24 hours.
+                {% else %}
+                Data has been posted to your website !
+                {% endif %}
               </div>
 
             </div>
@@ -41,9 +42,11 @@
                 <a href="{%url 'woocommerceApp:index' %}">
                 <button class="btn btn-default" type="submit">Back to dashboard</button>
                 </a>
+                {% if post %}
                 <a href="{%url 'woocommerceApp:download' schedule %}">
                 <button class="btn btn-primary" type="submit">Download</button>
                 </a>
+                {% endif %}
             </div>
           </div>
         </div>
