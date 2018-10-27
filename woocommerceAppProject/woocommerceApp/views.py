@@ -39,7 +39,16 @@ def index(request):
 @login_required
 def schedule_creation(request):
     profil = Profil.objects.get(user=request.user)
-    subscription = profil.subscription
+    subscription = None
+    if profil.free_subscription != None:
+        subscription = profil.free_subscription
+    elif profil.basic_subscription != None:
+        subscription = profil.basic_subscription
+    elif profil.premium_subscription != None:
+        subscription = profil.premium_subscription
+    elif profil.gold_subscription != None:
+        subscription = profil.gold_subscription
+
     if subscription.days_time >=1 and subscription.schedules_nb >= 1 and subscription.sites_limites >=1:
         if request.method == 'POST':
             schedule_form = ScheduleForm(request.POST)
