@@ -41,7 +41,11 @@
                         </td>
                         {% elif schedule.file_state == 'D' %}
                         <td>
-                            <span class="label label-primary">Done</span>
+                            <span class="label label-primary">Downloaded</span>
+                        </td>
+                        {% elif schedule.file_state == 'D' %}
+                        <td>
+                            <span class="label label-primary2">Posted</span>
                         </td>
                         {% endif %}
                        <td class="issue-info">
