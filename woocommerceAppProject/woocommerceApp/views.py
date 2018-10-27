@@ -247,7 +247,6 @@ def signup(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             subscription = Free_Trial.objects.create()
-            print(subscription)
             subscription.save()
             profile.free_subscription = subscription
             profile.save()

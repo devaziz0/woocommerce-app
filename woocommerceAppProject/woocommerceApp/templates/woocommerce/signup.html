@@ -10,7 +10,7 @@
             </div>
             <div class="hpanel">
                 <div class="panel-body">
-                        <form action="{%url 'woocommerceApp:signup' %}" id="loginForm" method="post">
+                        <form action="{%url 'woocommerceApp:signup' %}" id="loginForm" method="post" enctype="multipart/form-data">
                           {% csrf_token %}
                     				{{user_form.as_p}}
                                     <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;">
