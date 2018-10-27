@@ -221,7 +221,7 @@ def woocommerce_post(request,id):
             data["images"].append({"src": url, "position": number})
 
         wcapi.post("products", data)
-
+        schedule.file_state = 'PS'
         context = { 'schedule': schedule.id,
                     'state' : schedule.file_state,
                     'post' : True
