@@ -27,6 +27,9 @@ def set_timezone(request):
         return render(request, 'woocommerce/timezone.html', {'timezones': pytz.common_timezones})
 
 
+def landing(request):
+    return render(request,"woocommerce/landing.html")
+
 @login_required
 def index(request):
     schedules=Schedule.objects.filter(profil__id=request.user.profil.id)
@@ -218,8 +221,6 @@ def woocommerce_post(request,id):
         return render(request,"woocommerce/generate_success.html", context)
 
 
-
-
 @transaction.atomic
 def signup(request):
 
@@ -236,8 +237,10 @@ def signup(request):
             user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
-            subscription = Subscription.objects.get(title= 'Free trial')
-            profile.subscription = subscription
+            subscription = Free_Trial.objects.create()
+            print(subscription)
+            subscription.save()
+            profile.free_subscription = subscription
             profile.save()
             profile_form.save_m2m()
 
@@ -253,3 +256,7 @@ def signup(request):
 
     context = {"user_form":user_form, "profile_form":profile_form}
     return render(request, 'woocommerce/signup.html', context)
+
+@login_required
+def subscription(request):
+    pass
