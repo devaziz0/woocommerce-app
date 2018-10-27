@@ -16,9 +16,20 @@
        <div class="hpanel col-lg-10" style="margin-top: 1em;">
 
            <div class="panel-body">
+             {% if schedules %}
                <div class="table-responsive">
                <table class="table table-hover table-bordered table-striped">
                    <tbody>
+                     <thead>
+                       <tr>
+                          <th>State</th>
+                          <th>Request name</th>
+                          <th>Keywords & Category ID</th>
+                          <th>Website URL</th>
+                          <th>Request creation time</th>
+
+                        </tr>
+                      </thead>
                   {% for schedule in schedules %}
                    <tr>
                         {% if schedule.file_state == 'P' %}
@@ -36,7 +47,7 @@
                         {% endif %}
                        <td class="issue-info">
                            <a href="#">
-                               Request {{schedule.id}}
+                               {{schedule.id}}
                            </a>
                            <br/>
                            <small>
@@ -59,6 +70,11 @@
                  </tbody>
                </table>
                </div>
+               {% else %}
+               <div class="">
+                 No requests made yet.
+               </div>
+               {% endif %}
              </div>
            </div>
            <div class="col-lg-1">
