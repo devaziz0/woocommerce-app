@@ -14,12 +14,25 @@ import csv
 from .upload import *
 # Create your models here.
 
-class Subscription(models.Model):
-    title = models.CharField(max_length = 100)
-    days_time = models.IntegerField()
-    schedules_nb = models.IntegerField()
-    sites_limites = models.IntegerField()
+class Free_Trial(models.Model):
+    days_time = models.IntegerField(default=30)
+    schedules_nb = models.IntegerField(default=15)
+    sites_limites = models.IntegerField(default=10)
 
+class Basic_Subscription(models.Model):
+    days_time = models.IntegerField(default=30)
+    schedules_nb = models.IntegerField(default=15)
+    sites_limites = models.IntegerField(default=10)
+
+class Premium_Subscription(models.Model):
+    days_time = models.IntegerField(default=30)
+    schedules_nb = models.IntegerField(default=15)
+    sites_limites = models.IntegerField(default=10)
+
+class Gold_Subscription(models.Model):
+    days_time = models.IntegerField(default=30)
+    schedules_nb = models.IntegerField(default=15)
+    sites_limites = models.IntegerField(default=10)
 
 class Profil(models.Model):
     MALE = 'M'
@@ -39,9 +52,22 @@ class Profil(models.Model):
                                 default=DEFAULT_PHOTO)
     birthday = models.DateTimeField()
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
-    subscription = models.OneToOneField(Subscription,on_delete=models.CASCADE,
-            related_name='profil',
+    free_subscription = models.OneToOneField(Free_Trial,on_delete=models.CASCADE,
+            related_name='profil',null=True
             )
+
+    basic_subscription = models.OneToOneField(Basic_Subscription,on_delete=models.CASCADE,
+            related_name='profil',null=True
+            )
+    premium_subscription = models.OneToOneField(Premium_Subscription,on_delete=models.CASCADE,
+            related_name='profil',null=True
+            )
+    gold_subscription = models.OneToOneField(Gold_Subscription,on_delete=models.CASCADE,
+            related_name='profil',null=True
+            )
+
+
+
 
 
 
