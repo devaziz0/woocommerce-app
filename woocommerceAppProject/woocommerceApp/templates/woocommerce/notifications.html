@@ -1,0 +1,20 @@
+{% load staticfiles %}
+{% block notifications %}
+
+    {% if notifications %}
+    {% for notification in notifications %}
+    <li>
+        <a href="{%url 'woocommerceApp:schedule_display' notification.schedule.id%}">
+            <span class="label label-success">{{notification.title}}</span>
+            {{notification.description}}
+        </a>
+    </li>
+    {% endfor %}
+
+    {% else %}
+    <li>
+        No notifications to display.
+    </li>
+    {% endif %}
+
+{% endblock %}
