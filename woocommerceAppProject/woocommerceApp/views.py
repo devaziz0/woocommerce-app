@@ -240,17 +240,17 @@ def signup(request):
         user_form = UserForm(request.POST)
         profile_form = ProfileForm(request.POST, request.FILES)
 
-        if user_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save(commit=False)
             user.set_password(user.password)
             user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
             subscription = Free_Trial.objects.create()
-            subscription.save()
-            profile.free_subscription = subscription
             profile.save()
             profile_form.save_m2m()
+            subscription.profil = profile
+            subscription.save()
 
             user.save()
             login(request, user)
@@ -267,4 +267,111 @@ def signup(request):
 
 @login_required
 def subscription(request):
-    pass
+    profil = Profil.objects.get(user=request.user)
+    subscription = None
+    free_subscription = None
+    basic_subscription = None
+    premium_subscription = None
+    gold_subscription = None
+
+    try:
+        free_subscription = Free_Trial.objects.get(profil=profil)
+
+    except Exception as e:
+        pass
+    try:
+        basic_subscription = Basic_Subscription.objects.get(profil=profil)
+
+    except Exception as e:
+        pass
+
+    try:
+        premium_subscription = Premium_Subscription.objects.get(profil=profil)
+    except Exception as e:
+        pass
+
+    try:
+        gold_subscription = Gold_Subscription.objects.get(profil=profil)
+    except Exception as e:
+        pass
+
+    if free_subscription != None:
+        subscription = free_subscription
+    elif basic_subscription != None:
+        subscription = basic_subscription
+    elif premium_subscription != None:
+        subscription = premium_subscription
+    elif gold_subscription != None:
+        subscription = gold_subscription
+    context = { 'subscription' : subscription
+
+    }
+
+    return render(request, "woocommerce/subscription.html", context)
+
+@login_required
+def subscription_list(request):
+
+    return render(request, "woocommerce/subscription_change.html")
+
+@login_required
+def subscription_change(request, id):
+    profil = Profil.objects.get(user=request.user)
+    subscription = None
+    free_subscription = None
+    basic_subscription = None
+    premium_subscription = None
+    gold_subscription = None
+
+    try:
+        free_subscription = Free_Trial.objects.get(profil=profil)
+
+    except Exception as e:
+        pass
+    try:
+        basic_subscription = Basic_Subscription.objects.get(profil=profil)
+
+    except Exception as e:
+        pass
+
+    try:
+        premium_subscription = Premium_Subscription.objects.get(profil=profil)
+    except Exception as e:
+        pass
+
+    try:
+        gold_subscription = Gold_Subscription.objects.get(profil=profil)
+    except Exception as e:
+        pass
+
+    if free_subscription != None:
+        subscription = free_subscription
+    elif basic_subscription != None:
+        subscription = basic_subscription
+    elif premium_subscription != None:
+        subscription = premium_subscription
+    elif gold_subscription != None:
+        subscription = gold_subscription
+
+    subscription.delete()
+
+    if id == 1:
+        Basic_Subscription.objects.create(profil=profil)
+    elif id == 2:
+        Premium_Subscription.objects.create(profil=profil)
+    elif id == 3:
+        Gold_Subscription.objects.create(profil=profil)
+
+    return redirect(reverse('woocommerceApp:index'))
+
+@login_required
+def notification(request):
+    response = HttpResponse()
+    profil = Profil.objects.get(user = request.user)
+    notifications = None
+    try :
+        notifications = Notification.objects.get(profil=profil)
+    except Exception as e:
+        pass
+
+    return notifications
