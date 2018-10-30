@@ -14,25 +14,9 @@ import csv
 from .upload import *
 # Create your models here.
 
-class Free_Trial(models.Model):
-    days_time = models.IntegerField(default=30)
-    schedules_nb = models.IntegerField(default=15)
-    sites_limites = models.IntegerField(default=10)
-
-class Basic_Subscription(models.Model):
-    days_time = models.IntegerField(default=30)
-    schedules_nb = models.IntegerField(default=15)
-    sites_limites = models.IntegerField(default=10)
-
-class Premium_Subscription(models.Model):
-    days_time = models.IntegerField(default=30)
-    schedules_nb = models.IntegerField(default=15)
-    sites_limites = models.IntegerField(default=10)
-
-class Gold_Subscription(models.Model):
-    days_time = models.IntegerField(default=30)
-    schedules_nb = models.IntegerField(default=15)
-    sites_limites = models.IntegerField(default=10)
+lorem = 'Lorem ipsum dolor sit amet, \
+illum fastidii dissentias quo ne.\
+ Sea ne sint animal iisque, nam an soluta sensibus. '
 
 class Profil(models.Model):
     MALE = 'M'
@@ -52,23 +36,56 @@ class Profil(models.Model):
                                 default=DEFAULT_PHOTO)
     birthday = models.DateTimeField()
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
-    free_subscription = models.OneToOneField(Free_Trial,on_delete=models.CASCADE,
-            related_name='profil',null=True
+
+    def __str__(self):
+        return str(self.user.id) +' ' + self.user.username
+
+class Free_Trial(models.Model):
+    description = models.CharField(max_length=500, default=lorem)
+    days_time = models.IntegerField(default=30)
+    schedules_nb = models.IntegerField(default=15)
+    sites_limites = models.IntegerField(default=10)
+    profil = models.OneToOneField(Profil,
+                related_name='free_subscription',null=True, on_delete=models.CASCADE
+                )
+    def __str__(self):
+        return 'Free Trail'
+
+class Basic_Subscription(models.Model):
+    description = models.CharField(max_length=500, default=lorem)
+    days_time = models.IntegerField(default=45)
+    schedules_nb = models.IntegerField(default=20)
+    sites_limites = models.IntegerField(default=15)
+    profil = models.OneToOneField(Profil,
+            related_name='basic_subscription',null=True, on_delete=models.CASCADE
             )
 
-    basic_subscription = models.OneToOneField(Basic_Subscription,on_delete=models.CASCADE,
-            related_name='profil',null=True
+    def __str__(self):
+        return 'Standard Offer %s' % (self.id)
+
+class Premium_Subscription(models.Model):
+    description = models.CharField(max_length=500, default=lorem)
+    days_time = models.IntegerField(default=60)
+    schedules_nb = models.IntegerField(default=30)
+    sites_limites = models.IntegerField(default=20)
+    profil = models.OneToOneField(Profil,
+            related_name='premium_subscription',null=True, on_delete=models.CASCADE
             )
-    premium_subscription = models.OneToOneField(Premium_Subscription,on_delete=models.CASCADE,
-            related_name='profil',null=True
+
+    def __str__(self):
+        return 'Premium Offer %s' % (self.id)
+
+class Gold_Subscription(models.Model):
+    description = models.CharField(max_length=500, default=lorem)
+    days_time = models.IntegerField(default=80)
+    schedules_nb = models.IntegerField(default=40)
+    sites_limites = models.IntegerField(default=30)
+    profil = models.OneToOneField(Profil,
+            related_name='gold_subscription',null=True, on_delete=models.CASCADE
             )
-    gold_subscription = models.OneToOneField(Gold_Subscription,on_delete=models.CASCADE,
-            related_name='profil',null=True
-            )
 
-
-
-
+    def __str__(self):
+        return 'Gold Offer %s' % (self.id)
 
 
 class Schedule(models.Model):
@@ -158,6 +175,9 @@ class Schedule(models.Model):
     schedule_file_csv = models.FileField(upload_to=user_directory_path)
     file_state = models.CharField(max_length=1, default='P')
 
+    def __str__(self):
+        return 'Request %s' % (self.id)
+
     def decrease_hour(self):
         self.hours = self.hours -1
 
@@ -190,6 +210,12 @@ class Schedule(models.Model):
 class Notification(models.Model):
     active = models.BooleanField(default=False)
     title = models.CharField(max_length=100)
+    description = models.CharField(max_length = 200, default='This is a notification')
+    schedule = models.OneToOneField(Schedule,
+                on_delete=models.CASCADE,
+                related_name='notification'
+                )
+    link = models.CharField(max_length = 100, default='')
     profil = models.ForeignKey(Profil,
         on_delete=models.CASCADE,
         related_name='notification'
