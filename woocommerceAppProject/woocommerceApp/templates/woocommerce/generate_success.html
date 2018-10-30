@@ -1,6 +1,8 @@
 {% extends 'woocommerce/baseUser.html' %}
 {% load staticfiles %}
-
+{% block header %}
+<title>Congratulation</title>
+{% endblock %}
 {% block content %}
 
 <div id="wrapper">
@@ -24,7 +26,7 @@
                 <img src="{%static 'template/icons/checked.png' %}" alt="success" style="width : 5em; height: 5em;">
               </div>
               <div class="col-lg-10" style="margin: 1em;">
-                {% if post %}
+                {% if not post %}
                 Request completed, the CSV file is ready to be dowloaded !, you can download it right now or within 24 hours.
                 {% else %}
                 Data has been posted to your website !
@@ -42,7 +44,7 @@
                 <a href="{%url 'woocommerceApp:index' %}">
                 <button class="btn btn-default" type="submit">Back to dashboard</button>
                 </a>
-                {% if post==False %}
+                {% if not post %}
                 <a href="{%url 'woocommerceApp:download' schedule %}">
                 <button class="btn btn-primary" type="submit">Download</button>
                 </a>

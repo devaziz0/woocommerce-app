@@ -1,5 +1,7 @@
 {% extends 'woocommerce/baseUser.html' %}
-
+{% block header %}
+<title>Dashboard</title>
+{% endblock %}
 {% load staticfiles %}
 {% block content %}
     <div class="" id="wrapper">
@@ -33,15 +35,22 @@
                    <tr>
                         {% if schedule.file_state == 'P' %}
                        <td>
+                         <a href="{%url 'woocommerceApp:schedule_display' schedule.id %}">
+
                            <span class="label label-warning">Pending</span>
+                         </a>
                        </td>
                         {% elif schedule.file_state == 'C' %}
                         <td>
+                          <a href="{%url 'woocommerceApp:schedule_display' schedule.id %}">
                             <span class="label label-success">Created</span>
+                          </a>
                         </td>
                         {% elif schedule.file_state == 'D' %}
                         <td>
+                          <a href="{%url 'woocommerceApp:schedule_display' schedule.id %}">
                             <span class="label label-primary">Downloaded</span>
+                          </a>
                         </td>
                         {% elif schedule.file_state == 'PS' %}
                         <td>
@@ -49,20 +58,27 @@
                         </td>
                         {% endif %}
                        <td class="issue-info">
-                           <a href="#">
+                         <a href="{%url 'woocommerceApp:schedule_display' schedule.id %}">
+
                                {{schedule.id}}
-                           </a>
+
                            <br/>
                            <small>
                                Keywords: {{schedule.AliExpress_keywords}}, Category: {{schedule.AliExpress_category}}.
                            </small>
+                         </a>
                        </td>
                        <td>
+                         <a href="{%url 'woocommerceApp:schedule_display' schedule.id %}">
                            {{ schedule.woocommerce_url }}
+                         </a>
                        </td>
                        <td>
+                         <a href="{%url 'woocommerceApp:schedule_display' schedule.id %}">
                            {{ schedule.schedule_start }}
+                         </a>
                        </td>
+                       </a>
                        <td class="text-center">
                             <a href="{%url 'woocommerceApp:download' schedule.id %}">
                            <button class="btn btn-primary btn-sm"> Download</button>

@@ -1,5 +1,7 @@
 {% extends 'woocommerce/baseUser.html' %}
-
+{% block header %}
+<title>Choose a subscription</title>
+{% endblock %}
 {% load staticfiles %}
 
 {% block content %}
@@ -9,7 +11,7 @@
           <div class="row text-center">
               <div class="col-lg-12">
                   <h2><span class="text-success">Best pricing </span>for your needs</h2>
-                  <p>Lorem Ipsum available, but the majority have suffered alteration euismod. </p>
+                  <p>You will find the offers that fits you ! </p>
               </div>
           </div>
 
@@ -22,9 +24,6 @@
                   <ul class="pricing-plan list-unstyled selected">
                       <li class="pricing-title">
                           Standard
-                      </li>
-                      <li class="pricing-desc">
-                          Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.
                       </li>
                       <li class="pricing-price">
                           <span>$22</span>
@@ -49,9 +48,6 @@
                       <li class="pricing-title">
                           Premium
                       </li>
-                      <li class="pricing-desc">
-                          Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.
-                      </li>
                       <li class="pricing-price">
                           <span>$160</span>
                       </li>
@@ -75,9 +71,7 @@
                       <li class="pricing-title">
                           Gold
                       </li>
-                      <li class="pricing-desc">
-                          Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.
-                      </li>
+
                       <li class="pricing-price">
                           <span>$260</span>
                       </li>
