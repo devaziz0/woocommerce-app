@@ -27,8 +27,8 @@ services:
       - 80:80
     volumes:
       - ./config/nginx/conf.d:/etc/nginx/conf.d
-      - static_volume:/opt/OpenClass/static
-      - media_volume:/opt/OpenClass/media
+      - static_volume:/opt/woocommerceAppProject/static
+      - media_volume:/opt/woocommerceAppProject/media
     depends_on:
       - web
 
