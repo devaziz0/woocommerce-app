@@ -5,9 +5,9 @@ services:
     build: .
     image: woocommerce:0.1
     volumes:
-      - ./woocommerceAppProject:/opt/woocommerceAppProject
-    ports:
-      - "80:8000"
+      - static_volume:/opt/woocommerceAppProject/static
+      - media_volume:/opt/woocommerceAppProject/media
+
     restart: on-failure
     depends_on:
       - "db"
@@ -21,6 +21,18 @@ services:
       - POSTGRES_USER=woocommerce
     volumes:
       - pgdata:/var/lib/postgresql/data
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/OpenClass/static
+      - media_volume:/opt/OpenClass/media
+    depends_on:
+      - web
 
 volumes:
   pgdata:
+  static_volume:
+  media_volume:

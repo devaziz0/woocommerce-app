@@ -4,3 +4,4 @@ Pillow>=5.1
 requests
 aliexpress_api_client
 woocommerce
+gunicorn
