@@ -5,13 +5,12 @@ services:
     build: .
     image: woocommerce:0.1
     volumes:
-      - migrations:/opt/OpenClass/openclass/migrations
       - static_volume:/opt/woocommerceAppProject/static
       - media_volume:/opt/woocommerceAppProject/media
 
     networks:
-      - frontend
-      - backend_postgres
+      - nginx_network
+      - database_network
     depends_on:
       - "db"
     restart: on-failure
@@ -26,7 +25,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - backend_postgres
+      - database_network
 
   nginx:
     image: nginx:alpine
@@ -39,13 +38,15 @@ services:
     depends_on:
       - web
     networks:
-      - frontend
+      - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge
+  database_network:
+    driver: bridge
+
 volumes:
-  migrations:
   pgdata:
   static_volume:
   media_volume:
-
-networks:
-  frontend:
-  backend_postgres:
