@@ -1,0 +1,105 @@
+{% extends 'woocommerce/baseUser.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+<div class="landing-page">
+  <section id="pricing" >
+      <div class="container">
+          <div class="row text-center">
+              <div class="col-lg-12">
+                  <h2><span class="text-success">Best pricing </span>for your needs</h2>
+                  <p>Lorem Ipsum available, but the majority have suffered alteration euismod. </p>
+              </div>
+          </div>
+
+          <div class="row m-t-lg">
+              <div class="col-lg-2">
+
+              </div>
+
+              <div class="col-lg-3">
+                  <ul class="pricing-plan list-unstyled selected">
+                      <li class="pricing-title">
+                          Standard
+                      </li>
+                      <li class="pricing-desc">
+                          Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.
+                      </li>
+                      <li class="pricing-price">
+                          <span>$22</span>
+                      </li>
+                      <li>
+                          45 days
+                      </li>
+                      <li>
+                          20 Request per day
+                      </li>
+                      <li>
+                          15 different woocommerce website
+                      </li>
+                      <li class="plan-action">
+                          <a class="btn btn-primary btn-sm" href="{%url 'woocommerceApp:subscription_change' 1 %}">Choose</a>
+                      </li>
+                  </ul>
+              </div>
+
+              <div class="col-lg-3">
+                  <ul class="pricing-plan list-unstyled">
+                      <li class="pricing-title">
+                          Premium
+                      </li>
+                      <li class="pricing-desc">
+                          Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.
+                      </li>
+                      <li class="pricing-price">
+                          <span>$160</span>
+                      </li>
+                      <li>
+                          60 days
+                      </li>
+                      <li>
+                          30 Request per day
+                      </li>
+                      <li>
+                          20 different woocommerce website
+                      </li>
+                      <li>
+                          <a class="btn btn-primary btn-sm" href="{%url 'woocommerceApp:subscription_change' 2 %}">Choose</a>
+                      </li>
+                  </ul>
+              </div>
+
+              <div class="col-lg-3">
+                  <ul class="pricing-plan list-unstyled">
+                      <li class="pricing-title">
+                          Gold
+                      </li>
+                      <li class="pricing-desc">
+                          Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.
+                      </li>
+                      <li class="pricing-price">
+                          <span>$260</span>
+                      </li>
+                      <li>
+                          80 days
+                      </li>
+                      <li>
+                          40 Request per day
+                      </li>
+                      <li>
+                          30 different woocommerce website
+                      </li>
+                      <li>
+                          <a class="btn btn-primary btn-sm" href="{%url 'woocommerceApp:subscription_change' 3 %}">Choose</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+
+      </div>
+  </section>
+
+</div>
+
+{% endblock %}
