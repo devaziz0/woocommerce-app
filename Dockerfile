@@ -8,21 +8,18 @@ RUN apk update \
   && apk add postgresql-dev
 #Pillow requirements
 RUN apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev
+
 #installing django
-ADD requirements.txt /
+COPY requirements.txt /
 RUN pip install -r requirements.txt
 RUN rm requirements.txt
-#installing postgres to test if db ready
-RUN apk update
-RUN apk add postgresql
+
+#adding entrypoint scripts
+COPY docker-entrypoint.sh /
+COPY create_superuser.py /
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
 #adding the django project
 RUN mkdir -p $APP_PATH
 COPY $APP_DIR_NAME $APP_PATH
-WORKDIR $APP_PATH
-VOLUME $APP_PATH
-#adding entrypoint scripts
-ADD docker-entrypoint.sh /
-ADD create_superuser.py /
-RUN chmod +x /docker-entrypoint.sh
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
