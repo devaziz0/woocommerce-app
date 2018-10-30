@@ -1,0 +1,75 @@
+{% extends 'woocommerce/baseUser.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+<div id="wrapper">
+  <div class="row">
+    <div class="col-lg-1 col-lg-offset-1" style="margin-top: 1em;">
+     <div>
+     <b>List of requests:</b>
+     </div>
+    </div>
+  </div>
+   <div class="row" >
+     <div class="col-lg-1" >
+     </div>
+   <div class="hpanel col-lg-10" style="margin-top: 1em;">
+
+       <div class="panel-body">
+         {% if subscription %}
+           <div class="table-responsive">
+           <table class="table table-hover table-bordered table-striped">
+               <tbody>
+                 <thead>
+                   <tr>
+                      <th>Name</th>
+                      <th>Request left</th>
+                      <th>Days left</th>
+                      <th>Websites left</th>
+
+                    </tr>
+                  </thead>
+               <tr>
+
+                   <td>
+                       <span class="label label-primary">{{subscription}}</span>
+                   </td>
+
+                   <td>
+                      {{subscription.schedules_nb}}
+                   </td>
+                   <td>
+                       {{ subscription.days_time }}
+                   </td>
+                   <td>
+                       {{ subscription.sites_limites }}
+                   </td>
+               </tr>
+             </tbody>
+           </table>
+           </div>
+           {% else %}
+           <div class="">
+             No subscription .
+           </div>
+           {% endif %}
+         </div>
+       </div>
+       <div class="col-lg-1">
+
+       </div>
+     </div>
+
+     <div class="text-center" style="margin-top: 1em; margin-bottom: 1em;">
+       <a href="{%url 'woocommerceApp:subscription_list'%}">
+
+         <button type="button" class="btn btn-warning">
+           Change subscription
+         </button>
+       </a>
+
+    </div>
+
+</div>
+{% endblock %}
