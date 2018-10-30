@@ -3,12 +3,10 @@
 cd $APP_PATH
 
 # check if the database is ready
-echo "Waiting for Postgres DB"
-while ! pg_isready -h $PG_HOSTNAME > /dev/null 2>&1;
-do
-  echo -n "."
-  sleep 1
-done
+
+
+sleep 10
+
 echo "Postgres DB is ready"
 
 # create tables
