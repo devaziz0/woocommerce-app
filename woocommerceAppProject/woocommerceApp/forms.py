@@ -65,7 +65,7 @@ class ScheduleForm(ModelForm):
                 'AliExpress_Currency' : forms.Select(attrs= {'class':'form-control'}),
                 'AliExpress_language' : forms.Select(attrs= {'class':'form-control'}),
                 'AliExpress_Increment' : forms.TextInput(attrs= {'class':'form-control'}),
-                'woocommerce_url' : forms.TextInput(attrs= {'class':'form-control'}),
+                'woocommerce_url' : forms.TextInput(attrs= {'class':'form-control','placeholder':'http://www.example.com/'}),
                 'woocommerce_consumer_key' : forms.TextInput(attrs= {'class':'form-control'}),
                 'woocommerce_secret_key' : forms.TextInput(attrs= {'class':'form-control'}),
 
