@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .forms import *
+from django.core import serializers
 from django.core.files import File
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
@@ -25,7 +26,6 @@ def set_timezone(request):
         return redirect('/')
     else:
         return render(request, 'woocommerce/timezone.html', {'timezones': pytz.common_timezones})
-
 
 def landing(request):
     return render(request,"woocommerce/landing.html")
@@ -60,6 +60,15 @@ def schedule_creation(request):
                 schedule.save()
                 subscription.schedules_nb=subscription.schedules_nb -1
                 subscription.save()
+                notification = Notification.objects.create(title='Created',
+                    schedule = schedule,
+                    profil=profil,
+                    link= reverse('woocommerceApp:schedule_display',
+                     kwargs={'id':schedule.id}),
+                    description='Request ' + str(schedule.id)+ ' has been created !'
+                     )
+                schedule.save()
+                notification.save()
                 schedule_form = ScheduleForm()
 
                 context = { 'schedule_form' : schedule_form,
@@ -86,7 +95,7 @@ def schedule_creation(request):
 def generate_csv_file(request,id):
     schedule = Schedule.objects.get(pk=id)
     if schedule.file_state == 'P':
-        path = settings.MEDIA_ROOT + '/profiles/dopeman2/schedule' + str(id)  +'.csv'
+        path = settings.MEDIA_ROOT + '/profiles/'+ request.user.username + str(request.user.id) +'/schedule' + str(id)  +'.csv'
         f = open(path, 'w')
         writer = csv.writer(f)
         writer.writerow(['Product ID', 'Product Title', 'Product URL',
@@ -111,9 +120,7 @@ def generate_csv_file(request,id):
         f = open(path, 'r')
         newFile = ContentFile(f.read())
         schedule.file_state= 'C'
-        schedule.schedule_file.delete()
         schedule.schedule_file_csv.save('a.csv',newFile)
-        os.remove(f.name)
         context = { 'schedule': schedule.id,
                     'state' : schedule.file_state
 
@@ -136,6 +143,7 @@ def get_csv_file(request,id):
     f = open(response_path, 'r')
     response = HttpResponse(f,content_type='text/csv')
     schedule.file_state = 'D'
+    profil = Profil.objects
     schedule.save()
     response['Content-Disposition'] = 'attachment; filename=%s' %'response'+ str(id)+'.csv'
     return response
@@ -369,9 +377,15 @@ def notification(request):
     response = HttpResponse()
     profil = Profil.objects.get(user = request.user)
     notifications = None
-    try :
-        notifications = Notification.objects.get(profil=profil)
-    except Exception as e:
-        pass
 
-    return notifications
+    notifications = Notification.objects.filter(profil=profil)
+    context = {'notifications': notifications}
+    return render(request, 'woocommerce/notifications.html', context)
+
+@login_required
+def schedule_display(request, id):
+    schedule = Schedule.objects.get(id=id)
+    context = { 'schedule': schedule
+
+    }
+    return render(request, 'woocommerce/schedule_display.html', context)
