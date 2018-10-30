@@ -5,6 +5,7 @@ services:
     build: .
     image: woocommerce:0.1
     volumes:
+      - migrations:/opt/OpenClass/openclass/migrations
       - static_volume:/opt/woocommerceAppProject/static
       - media_volume:/opt/woocommerceAppProject/media
 
@@ -40,6 +41,7 @@ services:
     networks:
       - frontend
 volumes:
+  migrations:
   pgdata:
   static_volume:
   media_volume:
