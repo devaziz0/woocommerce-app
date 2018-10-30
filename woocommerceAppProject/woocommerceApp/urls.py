@@ -11,6 +11,7 @@ urlpatterns = [
     path('subscription/',views.subscription, name="subscription"),
     path('subscription/list/',views.subscription_list, name="subscription_list"),
     path('subscription/change/<int:id>/',views.subscription_change, name="subscription_change"),
+    path('dashboard/schedule/<int:id>/display/',views.schedule_display, name="schedule_display"),
     path('dashboard/schedule/<int:id>/download/', views.get_csv_file, name="download"),
     path('dashboard/schedule/<int:id>/generate/', views.generate_csv_file, name="generate"),
     path('dashboard/schedule/<int:id>/post/', views.woocommerce_post, name="post"),
