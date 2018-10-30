@@ -13,7 +13,6 @@ services:
       - backend_postgres
     depends_on:
       - "db"
-      - "db_redis"
     restart: on-failure
     environment:
       - PG_HOSTNAME=db
