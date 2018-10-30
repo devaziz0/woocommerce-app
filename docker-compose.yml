@@ -8,12 +8,16 @@ services:
       - static_volume:/opt/woocommerceAppProject/static
       - media_volume:/opt/woocommerceAppProject/media
 
-    restart: on-failure
+    networks:
+      - frontend
+      - backend_postgres
     depends_on:
       - "db"
+      - "db_redis"
     restart: on-failure
     environment:
       - PG_HOSTNAME=db
+
   db:
     image: postgres:alpine
     environment:
@@ -21,6 +25,9 @@ services:
       - POSTGRES_USER=woocommerce
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_postgres
+
   nginx:
     image: nginx:alpine
     ports:
@@ -31,8 +38,13 @@ services:
       - media_volume:/opt/woocommerceAppProject/media
     depends_on:
       - web
-
+    networks:
+      - frontend
 volumes:
   pgdata:
   static_volume:
   media_volume:
+
+networks:
+  frontend:
+  backend_postgres:
